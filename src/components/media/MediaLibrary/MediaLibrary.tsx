@@ -128,34 +128,33 @@ const MediaLibrary: React.FC<MediaLibraryProps> = ({ onMediaSelect }) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.1 }}
           >
-            <CyberGlassCard 
-              className="p-4 cursor-pointer hover:scale-105 transition-transform duration-300"
-              onClick={() => onMediaSelect(item)}
-            >
-              {/* Cover Art */}
-              <div className="w-full aspect-square bg-gradient-to-br from-[#FF00E5] to-[#00BFFF] rounded-lg mb-3 flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-4xl">
-                  {item.type === 'music' ? 'music_note' : 
-                   item.type === 'video' ? 'movie' : 'podcasts'}
-                </span>
-              </div>
-              
-              {/* Media Info */}
-              <div>
-                <h3 className="font-semibold text-white truncate">{item.title}</h3>
-                <p className="text-gray-400 text-sm truncate">{item.artist}</p>
-                <div className="flex justify-between items-center mt-2">
-                  <span className="text-xs text-gray-400">{item.duration}</span>
-                  <span className={`px-2 py-1 rounded text-xs ${
-                    item.type === 'music' ? 'bg-[#00FFC2]/20 text-[#00FFC2]' :
-                    item.type === 'video' ? 'bg-[#FF00E5]/20 text-[#FF00E5]' :
-                    'bg-[#00BFFF]/20 text-[#00BFFF]'
-                  }`}>
-                    {item.type}
+            <div onClick={() => onMediaSelect(item)}>
+              <CyberGlassCard className="p-4 cursor-pointer hover:scale-105 transition-transform duration-300">
+                {/* Cover Art */}
+                <div className="w-full aspect-square bg-gradient-to-br from-[#FF00E5] to-[#00BFFF] rounded-lg mb-3 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-white text-4xl">
+                    {item.type === 'music' ? 'music_note' : 
+                     item.type === 'video' ? 'movie' : 'podcasts'}
                   </span>
                 </div>
-              </div>
-            </CyberGlassCard>
+                
+                {/* Media Info */}
+                <div>
+                  <h3 className="font-semibold text-white truncate">{item.title}</h3>
+                  <p className="text-gray-400 text-sm truncate">{item.artist}</p>
+                  <div className="flex justify-between items-center mt-2">
+                    <span className="text-xs text-gray-400">{item.duration}</span>
+                    <span className={`px-2 py-1 rounded text-xs ${
+                      item.type === 'music' ? 'bg-[#00FFC2]/20 text-[#00FFC2]' :
+                      item.type === 'video' ? 'bg-[#FF00E5]/20 text-[#FF00E5]' :
+                      'bg-[#00BFFF]/20 text-[#00BFFF]'
+                    }`}>
+                      {item.type}
+                    </span>
+                  </div>
+                </div>
+              </CyberGlassCard>
+            </div>
           </motion.div>
         ))}
       </div>
