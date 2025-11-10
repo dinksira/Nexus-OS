@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { AccountSettings } from '@/types/settings';
+import type { AccountSettings } from '@/types/settings';
+import CyberToggle from '../ui/CyberToggle';
 
 const initialSettings: AccountSettings = {
   username: 'quantum_user',
