@@ -12,8 +12,12 @@ const orbitron = Orbitron({
 })
 
 export const metadata = {
-  title: 'Nexus OS Dashboard',
-  description: 'A futuristic personal dashboard',
+  title: 'Nexus OS - Quantum Interface System',
+  description: 'A futuristic personal dashboard with quantum-inspired design',
+  icons: {
+    icon: '/logo.png', // Favicon
+    apple: '/logo.png', // Apple touch icon
+  },
 }
 
 export default function RootLayout({
@@ -23,9 +27,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${orbitron.variable}`}>
-      <head>
-        {/* Remove the duplicate Material Icons import since it's in globals.css */}
-      </head>
       <body className={inter.className}>
         {children}
       </body>

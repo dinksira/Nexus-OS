@@ -1,85 +1,78 @@
 'use client'
 
-import React, { useState, useRef } from 'react';
-import CyberGlassCard from '../../../components/ui/CyberGlassCard/CyberGlassCard';
+import React, { useState } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
+import CyberGlassCard from '../../../components/ui/CyberGlassCard/CyberGlassCard'
+import { LogoIcon } from '../../../components/Logo/Logo'
 
 const SideNavBar: React.FC = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true); // Start collapsed by default
-  const [isHovered, setIsHovered] = useState(false);
-  const sidebarRef = useRef<HTMLDivElement>(null);
+  const [isCollapsed, setIsCollapsed] = useState(true) // Start collapsed
+  const [isHovered, setIsHovered] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
 
   const navItems = [
-    { icon: 'grid_view', label: 'Dashboard', isActive: true },
-    { icon: 'analytics', label: 'Analytics' },
-    { icon: 'perm_media', label: 'Media' },
-    { icon: 'calendar_today', label: 'Calendar' },
-    { icon: 'settings', label: 'Settings' },
-  ];
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
+    { icon: 'grid_view', label: 'Dashboard', path: '/dashboard' },
+    { icon: 'analytics', label: 'Analytics', path: '/analytics' },
+    { icon: 'perm_media', label: 'Media', path: '/media' },
+    { icon: 'calendar_today', label: 'Calendar', path: '/calendar' },
+    { icon: 'settings', label: 'Settings', path: '/settings' },
+  ]
 
   const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-    // If manually toggling to expanded, disable hover effect temporarily
-    if (isCollapsed) {
-      setIsHovered(false);
+    setIsCollapsed(!isCollapsed)
+    // If manually expanding, disable hover effect
+    if (!isCollapsed) {
+      setIsHovered(false)
     }
-  };
+  }
 
-  // Determine the actual width based on state
-  const getSidebarWidth = () => {
-    if (isHovered && isCollapsed) {
-      return 'w-64'; // Expanded on hover
-    }
-    return isCollapsed ? 'w-16' : 'w-64';
-  };
+  const handleNavigation = (path: string) => {
+    router.push(path)
+  }
 
-  // Determine if content should be visible
-  const shouldShowContent = !isCollapsed || isHovered;
+  const isActive = (path: string) => {
+    return pathname === path
+  }
+
+  // Determine if content should be visible (expanded state)
+  const shouldShowContent = !isCollapsed || isHovered
 
   return (
     <div 
-      ref={sidebarRef}
       className="relative h-full"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <CyberGlassCard 
-        className={`h-full flex flex-col justify-between p-4 shrink-0 transition-all duration-300 ${getSidebarWidth()}`}
+        className={`h-full flex flex-col justify-between p-4 shrink-0 transition-all duration-300 ${
+          shouldShowContent ? 'w-64' : 'w-16'
+        }`}
       >
         <div className="flex flex-col gap-8">
           {/* Logo and Toggle Button */}
-          <div className="flex items-center justify-between text-white">
+          <div className="flex items-center justify-between">
             <div className={`flex items-center gap-4 transition-all duration-300 ${
               shouldShowContent ? 'opacity-100 w-auto' : 'opacity-0 w-0'
             }`}>
-              <div className="w-8 h-8 bg-gradient-to-br from-[#FF00E5] to-[#00BFFF] rounded-lg flex items-center justify-center shrink-0">
-                <span className="text-white font-bold text-sm">N</span>
-              </div>
-              <h1 
-                className="text-2xl font-bold whitespace-nowrap transition-all duration-300"
-                style={{ fontFamily: 'Orbitron, sans-serif' }}
-              >
+              <LogoIcon size={32} />
+              <h1 className="text-2xl font-bold whitespace-nowrap" style={{ fontFamily: 'Orbitron, sans-serif' }}>
                 Nexus
               </h1>
             </div>
             
-            {/* Toggle Button - Always visible */}
-            <button
-              onClick={toggleSidebar}
-              className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center shrink-0 ml-2"
-              title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            >
-              <span className="material-symbols-outlined text-white text-lg transition-transform duration-300">
-                {isCollapsed ? 'chevron_right' : 'chevron_left'}
-              </span>
-            </button>
+            {/* Toggle Button - Only show when not auto-expanded by hover */}
+            {!isHovered && (
+              <button
+                onClick={toggleSidebar}
+                className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center shrink-0 ml-2"
+                title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              >
+                <span className="material-symbols-outlined text-white text-lg transition-transform duration-300">
+                  {isCollapsed ? 'chevron_right' : 'chevron_left'}
+                </span>
+              </button>
+            )}
           </div>
 
           {/* Navigation */}
@@ -87,8 +80,9 @@ const SideNavBar: React.FC = () => {
             {navItems.map((item) => (
               <button
                 key={item.label}
-                className={`flex items-center rounded-lg transition-all duration-200 group ${
-                  item.isActive 
+                onClick={() => handleNavigation(item.path)}
+                className={`flex items-center rounded-lg transition-all duration-200 group relative ${
+                  isActive(item.path)
                     ? 'bg-white/10 border border-white/20' 
                     : 'hover:bg-white/10'
                 } ${
@@ -96,16 +90,18 @@ const SideNavBar: React.FC = () => {
                 }`}
                 title={!shouldShowContent ? item.label : ''}
               >
-                <span className="material-symbols-outlined text-white text-2xl shrink-0">
+                <span className={`material-symbols-outlined text-2xl shrink-0 ${
+                  isActive(item.path) ? 'text-[#00BFFF]' : 'text-white'
+                }`}>
                   {item.icon}
                 </span>
                 
                 {/* Label */}
-                <span className={`text-white text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                <span className={`transition-all duration-300 whitespace-nowrap ${
                   shouldShowContent 
                     ? 'opacity-100 ml-3 w-auto' 
                     : 'opacity-0 ml-0 w-0'
-                }`}>
+                } ${isActive(item.path) ? 'text-white font-semibold' : 'text-white/70'}`}>
                   {item.label}
                 </span>
 
@@ -114,6 +110,11 @@ const SideNavBar: React.FC = () => {
                   <div className="absolute left-full ml-2 px-2 py-1 bg-black/80 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 pointer-events-none">
                     {item.label}
                   </div>
+                )}
+
+                {/* Active indicator dot for collapsed state */}
+                {!shouldShowContent && isActive(item.path) && (
+                  <div className="absolute -right-1 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-[#00BFFF] rounded-full holographic-glow-blue" />
                 )}
               </button>
             ))}
@@ -153,7 +154,7 @@ const SideNavBar: React.FC = () => {
         </div>
       </CyberGlassCard>
     </div>
-  );
-};
+  )
+}
 
-export default SideNavBar;
+export default SideNavBar

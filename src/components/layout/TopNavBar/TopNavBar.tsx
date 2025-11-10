@@ -1,17 +1,31 @@
 'use client'
 
-import React, { useState } from 'react';
-import CyberGlassCard from '../../../components/ui/CyberGlassCard/CyberGlassCard';
+import React, { useState } from 'react'
+import CyberGlassCard from '../../../components/ui/CyberGlassCard/CyberGlassCard'
+import { LogoIcon } from '../../../components/Logo/Logo'
 
 const TopNavBar: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('')
 
   return (
     <CyberGlassCard className="w-full h-16 px-6 shrink-0">
       <div className="flex items-center justify-between h-full">
-        {/* Search Bar */}
-        <div className="flex-1">
-          <div className="flex items-center w-full max-w-md">
+        {/* Logo on the left */}
+        <div className="flex items-center gap-4">
+          <LogoIcon size={28} />
+          <div className="hidden md:block">
+            <span 
+              className="text-lg font-bold bg-gradient-to-r from-[#FF00E5] to-[#00BFFF] bg-clip-text text-transparent"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
+            >
+              Nexus OS
+            </span>
+          </div>
+        </div>
+
+        {/* Search Bar - Centered */}
+        <div className="flex-1 max-w-md mx-8">
+          <div className="flex items-center">
             <span className="material-symbols-outlined text-gray-400 text-xl mr-3">
               search
             </span>
@@ -45,7 +59,7 @@ const TopNavBar: React.FC = () => {
         </div>
       </div>
     </CyberGlassCard>
-  );
-};
+  )
+}
 
-export default TopNavBar;
+export default TopNavBar
