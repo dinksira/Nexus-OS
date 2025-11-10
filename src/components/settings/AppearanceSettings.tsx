@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { AppearanceSettings } from '@/types/settings';
+import type { AppearanceSettings } from '@/types/settings';
+import CyberToggle from "../ui/CyberToggle";
 
 const initialSettings: AppearanceSettings = {
   theme: 'dark',

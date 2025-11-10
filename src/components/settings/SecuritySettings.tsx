@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { SecuritySettings } from '@/types/settings';
+import type { SecuritySettings } from '@/types/settings';
+import CyberToggle from "../ui/CyberToggle";
 
 const initialSettings: SecuritySettings = {
   twoFactorEnabled: true,

@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { NotificationSettings } from '@/types/settings';
+import type { NotificationSettings } from '@/types/settings';
+import CyberToggle from "../ui/CyberToggle";
 
 const initialSettings: NotificationSettings = {
   enabled: true,
