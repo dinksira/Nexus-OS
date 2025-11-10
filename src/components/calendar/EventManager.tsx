@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import CyberGlassCard from '../../ui/CyberGlassCard/CyberGlassCard'
+import CyberGlassCard from '../ui/CyberGlassCard/CyberGlassCard'
 
 interface CalendarEvent {
   id: string

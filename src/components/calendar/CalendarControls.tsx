@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import CyberGlassCard from '../../ui/CyberGlassCard/CyberGlassCard'
+import CyberGlassCard from '../ui/CyberGlassCard/CyberGlassCard'
 
 interface CalendarEvent {
   id: string

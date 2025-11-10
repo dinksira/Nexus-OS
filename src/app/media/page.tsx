@@ -8,9 +8,20 @@ import VideoPlayer from '../../components/media/VideoPlayer/VideoPlayer'
 import Podcasts from '../../components/media/Podcasts/Podcasts'
 import MediaControls from '../../components/media/MediaControls/MediaControls'
 
+// Define the MediaItem interface here to match MediaLibrary
+interface MediaItem {
+  id: string
+  title: string
+  artist: string
+  type: 'music' | 'video' | 'podcast'
+  duration: string
+  coverArt: string
+  genre: string
+}
+
 const MediaPage = () => {
   const [activeTab, setActiveTab] = useState('library')
-  const [nowPlaying, setNowPlaying] = useState(null)
+  const [nowPlaying, setNowPlaying] = useState<MediaItem | null>(null)
 
   const mediaTabs = [
     { id: 'library', label: 'Quantum Library', icon: 'library_music' },
@@ -19,6 +30,11 @@ const MediaPage = () => {
     { id: 'podcasts', label: 'Neural Casts', icon: 'podcasts' },
     { id: 'playlists', label: 'Data Streams', icon: 'playlist_play' },
   ]
+
+  // Create a handler function that matches the expected type
+  const handleMediaSelect = (media: MediaItem) => {
+    setNowPlaying(media)
+  }
 
   return (
     <MainLayout>
@@ -39,7 +55,7 @@ const MediaPage = () => {
                 <div className="w-12 h-12 bg-gradient-to-br from-[#FF00E5] to-[#00BFFF] rounded-lg"></div>
                 <div>
                   <p className="font-semibold text-sm">Now Playing</p>
-                  <p className="text-gray-400 text-xs">Chromatic Waves - Synth Rider</p>
+                  <p className="text-gray-400 text-xs">{nowPlaying.title} - {nowPlaying.artist}</p>
                 </div>
               </div>
             </div>
@@ -68,7 +84,7 @@ const MediaPage = () => {
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
           {/* Main Content Area */}
           <div className="xl:col-span-3">
-            {activeTab === 'library' && <MediaLibrary onMediaSelect={setNowPlaying} />}
+            {activeTab === 'library' && <MediaLibrary onMediaSelect={handleMediaSelect} />}
             {activeTab === 'music' && <MusicPlayer />}
             {activeTab === 'video' && <VideoPlayer />}
             {activeTab === 'podcasts' && <Podcasts />}

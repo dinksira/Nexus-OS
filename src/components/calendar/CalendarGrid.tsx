@@ -17,8 +17,6 @@ interface CalendarEvent {
 
 interface CalendarGridProps {
   currentDate: Date
-  view: 'month' | 'week' | 'day'
-  events: CalendarEvent[]
   onDateChange: (date: Date) => void
   onEventSelect: (event: CalendarEvent) => void
   onEventCreate: (event: Omit<CalendarEvent, 'id'>) => void
@@ -26,12 +24,41 @@ interface CalendarGridProps {
 
 const CalendarGrid: React.FC<CalendarGridProps> = ({
   currentDate,
-  view,
-  events,
   onDateChange,
   onEventSelect,
   onEventCreate
 }) => {
+  // Sample events data
+  const sampleEvents: CalendarEvent[] = [
+    {
+      id: '1',
+      title: 'Team Sync',
+      description: 'Weekly team synchronization meeting',
+      startTime: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15, 10, 0),
+      endTime: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15, 11, 0),
+      type: 'meeting',
+      priority: 'high'
+    },
+    {
+      id: '2',
+      title: 'Project Deadline',
+      description: 'Final submission for quantum project',
+      startTime: new Date(currentDate.getFullYear(), currentDate.getMonth(), 20, 17, 0),
+      endTime: new Date(currentDate.getFullYear(), currentDate.getMonth(), 20, 18, 0),
+      type: 'task',
+      priority: 'high'
+    },
+    {
+      id: '3',
+      title: 'Client Call',
+      description: 'Monthly client review meeting',
+      startTime: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 14, 0),
+      endTime: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 15, 0),
+      type: 'meeting',
+      priority: 'medium'
+    }
+  ]
+
   const getDaysInMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
   }
@@ -41,7 +68,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
   }
 
   const getEventsForDay = (day: number) => {
-    return events.filter(event => {
+    return sampleEvents.filter(event => {
       const eventDate = new Date(event.startTime)
       return eventDate.getDate() === day && 
              eventDate.getMonth() === currentDate.getMonth() &&
@@ -51,20 +78,21 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
 
   const getEventColor = (type: CalendarEvent['type']) => {
     switch (type) {
-      case 'meeting': return 'from-[#00BFFF] to-blue-600'
-      case 'reminder': return 'from-[#FF00E5] to-pink-600'
-      case 'task': return 'from-[#00FFC2] to-green-600'
-      case 'event': return 'from-[#FFA500] to-orange-600'
-      default: return 'from-gray-500 to-gray-600'
+      case 'meeting': return 'bg-gradient-to-r from-[#00BFFF] to-blue-600'
+      case 'reminder': return 'bg-gradient-to-r from-[#FF00E5] to-pink-600'
+      case 'task': return 'bg-gradient-to-r from-[#00FFC2] to-green-600'
+      case 'event': return 'bg-gradient-to-r from-[#FFA500] to-orange-600'
+      default: return 'bg-gradient-to-r from-gray-500 to-gray-600'
     }
   }
 
-  const getPriorityBorder = (priority: CalendarEvent['priority']) => {
-    switch (priority) {
-      case 'high': return 'border-l-2 border-l-red-500'
-      case 'medium': return 'border-l-2 border-l-yellow-500'
-      case 'low': return 'border-l-2 border-l-green-500'
-      default: return ''
+  const getEventIcon = (type: CalendarEvent['type']) => {
+    switch (type) {
+      case 'meeting': return 'groups'
+      case 'reminder': return 'notifications'
+      case 'task': return 'checklist'
+      case 'event': return 'celebration'
+      default: return 'event'
     }
   }
 
@@ -144,7 +172,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
               className={`min-h-[120px] p-2 rounded-lg border border-white/10 ${
                 day ? 'bg-white/5 hover:bg-white/10 cursor-pointer' : 'bg-transparent'
               } ${isToday ? 'ring-2 ring-[#00BFFF] ring-opacity-50' : ''}`}
-              onClick={() => day && console.log('Day clicked:', day)} // Add your day click handler
+              onClick={() => day && console.log('Day clicked:', day)}
             >
               {day && (
                 <>
@@ -160,7 +188,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                       <motion.div
                         key={event.id}
                         whileHover={{ scale: 1.02 }}
-                        className={`text-xs p-1 rounded bg-gradient-to-r ${getEventColor(event.type)} ${getPriorityBorder(event.priority)} text-white cursor-pointer`}
+                        className={`text-xs p-1 rounded ${getEventColor(event.type)} text-white cursor-pointer`}
                         onClick={(e) => {
                           e.stopPropagation()
                           onEventSelect(event)
@@ -168,9 +196,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
                       >
                         <div className="flex items-center gap-1">
                           <span className="material-symbols-outlined text-xs">
-                            {event.type === 'meeting' ? 'groups' :
-                             event.type === 'reminder' ? 'notifications' :
-                             event.type === 'task' ? 'checklist' : 'event'}
+                            {getEventIcon(event.type)}
                           </span>
                           <span className="truncate flex-1">{event.title}</span>
                         </div>

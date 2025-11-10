@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react'
 import MainLayout from '../../components/layout/MainLayout/MainLayout'
-import CalendarGrid from '../../components/calendar/CalendarGrid/CalendarGrid'
-import WeekView from '../../components/calendar/WeekView/WeekView'
-import DayView from '../../components/calendar/DayView/DayView'
-import EventManager from '../../components/calendar/EventManager/EventManager'
-import CalendarControls from '../../components/calendar/CalendarControls/CalendarControls'
+import CalendarGrid from '../../components/calendar/CalendarGrid'
+import WeekView from '../../components/calendar/WeekView'
+import DayView from '../../components/calendar/DayView'
+import EventManager from '../../components/calendar/EventManager'
+import CalendarControls from '../../components/calendar/CalendarControls'
 
 interface CalendarEvent {
   id: string
